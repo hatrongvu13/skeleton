@@ -92,6 +92,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new TokenResponse(this.authority(user));
     }
 
+    @Override
+    public TokenUser info(UserPrincipal currentUser) {
+        return currentUser.getTokenUser();
+    }
+
     private String authority(User user) {
         TokenUser tokenUser = mapper.map(user, TokenUser.class);
         return tokenProvider.issueToken(UserPrincipal.create(tokenUser));

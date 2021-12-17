@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -80,7 +81,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (!Objects.isNull(user)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username is already in used !");
         }
-        if(userRepository.existsByEmail(registerRequest.getEmail())) {
+        if (userRepository.existsByEmail(registerRequest.getEmail())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is already in used !");
         }
 
@@ -95,6 +96,27 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public TokenUser info(UserPrincipal currentUser) {
         return currentUser.getTokenUser();
+    }
+
+    @Override
+    public TokenResponse admin(RegisterRequest registerRequest) {
+        if (userRepository.existsByUsername(registerRequest.getUsername())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username is already in used !");
+        }
+        if (userRepository.existsByEmail(registerRequest.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is already in used !");
+        }
+
+        User user = mapper.map(registerRequest, User.class);
+        user.setPassword(encoder.encode(registerRequest.getPassword()));
+
+        List<String> scopes = new ArrayList<>();
+        scopes.add("ADMIN");
+        user.setScopes(scopes);
+
+        user = userRepository.save(user);
+
+        return new TokenResponse(this.authority(user));
     }
 
     private String authority(User user) {

@@ -43,4 +43,10 @@ public class AuthenticationController {
     public TokenUser info(@ApiIgnore @AuthenticationPrincipal UserPrincipal currentUser) {
         return authenticationService.info(currentUser);
     }
+
+    @RequestMapping(value = "/admin", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Admin account register")
+    public TokenResponse admin(@RequestBody @Valid RegisterRequest registerRequest) {
+        return authenticationService.admin(registerRequest);
+    }
 }

@@ -12,4 +12,6 @@ public interface AuthenticationService {
     TokenResponse register(RegisterRequest registerRequest);
 
     TokenUser info(UserPrincipal currentUser);
+
+    TokenResponse admin(RegisterRequest registerRequest);
 }

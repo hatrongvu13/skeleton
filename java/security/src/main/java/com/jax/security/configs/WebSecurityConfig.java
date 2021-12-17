@@ -83,6 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/authentication/reset-password-passcode",
                         "/authentication/reset-passcode",
                         "/authentication/reset-password",
+                        "/authentication/admin",
                         "/mb-ekyc/callback",
                         "/onboarding/callback",
                         "/webhook",

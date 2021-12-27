@@ -85,6 +85,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is already in used !");
         }
 
+        user = mapper.map(registerRequest, User.class);
         user.setScopes(new ArrayList<>());
         user.setPassword(encoder.encode(registerRequest.getPassword()));
 

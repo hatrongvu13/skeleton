@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dev-beeclass-web-release-fe
+  name: uat-beeclass-web-release-fe
   namespace: beeclass
   labels:
-    app: dev-beeclass-web-release-fe
-    env: dev
+    app: uat-beeclass-web-release-fe
+    env: uat
 spec:
   selector:
     matchLabels:
-      app: dev-beeclass-web-release-fe
-      env: dev
+      app: uat-beeclass-web-release-fe
+      env: uat
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -19,15 +19,15 @@ spec:
   template:
     metadata:
       labels:
-        app: dev-beeclass-web-release-fe
-        env: dev
+        app: uat-beeclass-web-release-fe
+        env: uat
     spec:
       imagePullSecrets:
       - name: broodreg
       containers:
-      - image: brood.azurecr.io/tungpx/beeclass_web_release:dev
+      - image: brood.azurecr.io/tungpx/beeclass_web_release:uat
         imagePullPolicy: Always
-        name: dev-beeclass-web-release-fe
+        name: uat-beeclass-web-release-fe
         volumeMounts:
         - name: tz-config
           mountPath: /etc/localtime
@@ -54,7 +54,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: dev-beeclass-web-release-fe
+  name: uat-beeclass-web-release-fe
   namespace: beeclass
   annotations:
     kubernetes.io/ingress.class: nginx
@@ -63,15 +63,15 @@ metadata:
 spec:
   tls:
   - hosts:
-    - dev-beeclass-web-release-fe.aks-dev.mb-innovationlab.com
-    secretName: tls-dev-beeclass-web-release-fe
+    - uat-beeclass-web-release-fe.uat.mb-innovationlab.com
+    secretName: tls-uat-beeclass-web-release-fe
   rules:
-  - host: dev-beeclass-web-release-fe.aks-dev.mb-innovationlab.com
+  - host: uat-beeclass-web-release-fe.uat.mb-innovationlab.com
     http:
       paths:
       - path: /(.*)
         backend:
-          serviceName: dev-beeclass-web-release-fe
+          serviceName: uat-beeclass-web-release-fe
           servicePort: 80
 
 ---
@@ -79,7 +79,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: dev-beeclass-web-release-fe
+  name: uat-beeclass-web-release-fe
   namespace: beeclass
 spec:
   ports:
@@ -87,6 +87,6 @@ spec:
       port: 80
       protocol: TCP
   selector:
-    app: dev-beeclass-web-release-fe
-    env: dev
+    app: uat-beeclass-web-release-fe
+    env: uat
 
